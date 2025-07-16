@@ -461,7 +461,6 @@ const FAQPage: React.FC<FAQPageProps> = ({ onBack }) => {
                         FAQ #{faq.id}
                       </div>
                     </div>
-                    </div>
                   </div>
                 </div>
               )}
