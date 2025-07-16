@@ -426,36 +426,38 @@ const FAQPage: React.FC<FAQPageProps> = ({ onBack }) => {
         </div>
 
         {/* FAQ Items */}
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {filteredFAQs.map((faq) => (
             <div
               key={faq.id}
-              className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl"
+              className="bg-gradient-to-r from-yellow-200 to-yellow-300 rounded-lg border border-yellow-400 overflow-hidden transition-all duration-300 hover:shadow-lg"
             >
               <button
                 onClick={() => toggleExpanded(faq.id)}
-                className="w-full p-6 text-left flex items-center justify-between hover:bg-slate-50/50 transition-colors"
+                className="w-full p-4 text-left flex items-center justify-between hover:bg-yellow-300/50 transition-colors"
               >
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-800 mb-2">{faq.question}</h3>
-                  <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
-                    {categories.find(cat => cat.id === faq.category)?.label || 'General'}
-                  </span>
+                <div className="flex-1 pr-4">
+                  <h3 className="text-base font-semibold text-slate-800">{faq.question}</h3>
                 </div>
                 <div className="ml-4">
                   {expandedItems.includes(faq.id) ? (
-                    <ChevronUp className="w-6 h-6 text-slate-600" />
+                    <span className="text-2xl font-bold text-slate-700">−</span>
                   ) : (
-                    <ChevronDown className="w-6 h-6 text-slate-600" />
+                    <span className="text-2xl font-bold text-slate-700">+</span>
                   )}
                 </div>
               </button>
 
               {/* Expandable Answer */}
               {expandedItems.includes(faq.id) && (
-                <div className="px-6 pb-6 border-t border-slate-200/50">
-                  <div className="pt-4">
-                    <p className="text-slate-700 leading-relaxed">{faq.answer}</p>
+                <div className="px-4 pb-4 border-t border-yellow-400/50 bg-yellow-100/50">
+                  <div className="pt-3">
+                    <p className="text-slate-700 leading-relaxed text-sm">{faq.answer}</p>
+                    <div className="mt-3">
+                      <span className="inline-block px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                        {categories.find(cat => cat.id === faq.category)?.label || 'General'}
+                      </span>
+                    </div>
                   </div>
                 </div>
               )}
@@ -465,7 +467,7 @@ const FAQPage: React.FC<FAQPageProps> = ({ onBack }) => {
 
         {/* No Results Message */}
         {filteredFAQs.length === 0 && (
-          <div className="text-center py-12">
+          <div className="text-center py-12 col-span-full">
             <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <HelpCircle className="w-8 h-8 text-slate-500" />
             </div>
@@ -475,7 +477,7 @@ const FAQPage: React.FC<FAQPageProps> = ({ onBack }) => {
         )}
 
         {/* Contact Support Section */}
-        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-6 text-white text-center mt-8">
+        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-6 text-white text-center mt-8 col-span-full lg:col-span-2">
           <h3 className="text-xl font-bold mb-2">Still have questions?</h3>
           <p className="text-green-100 mb-4">Our support team is here to help you with personalized assistance</p>
           <button className="bg-white/20 backdrop-blur-sm px-6 py-3 rounded-xl hover:bg-white/30 transition-all duration-200 font-medium">
