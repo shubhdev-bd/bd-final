@@ -19,7 +19,7 @@ interface FAQItem {
  */
 const FAQPage: React.FC<FAQPageProps> = ({ onBack }) => {
   // State for managing expanded FAQ items
-  const [expandedItems, setExpandedItems] = useState<number[]>([]);
+  const [expandedItem, setExpandedItem] = useState<number | null>(null);
   // State for search functionality
   const [searchTerm, setSearchTerm] = useState('');
   // State for category filtering
@@ -342,14 +342,50 @@ const FAQPage: React.FC<FAQPageProps> = ({ onBack }) => {
 
   /**
    * Toggle FAQ item expansion
+   * Only one item can be expanded at a time
    * @param id - FAQ item ID to toggle
    */
   const toggleExpanded = (id: number) => {
-    setExpandedItems(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id)
-        : [...prev, id]
-    );
+    setExpandedItem(prev => prev === id ? null : id);
+  };
+
+  /**
+   * Format answer text with proper line breaks and structure
+   * @param answer - Raw answer text
+   * @returns Formatted answer with proper structure
+   */
+  const formatAnswer = (answer: string) => {
+    // Split by numbered points and format them
+    const parts = answer.split(/(\d+\))/);
+    const formatted = [];
+    
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i].trim();
+      if (!part) continue;
+      
+      if (/^\d+\)$/.test(part)) {
+        // This is a number like "1)", "2)", etc.
+        const nextPart = parts[i + 1]?.trim();
+        if (nextPart) {
+          formatted.push(
+            <div key={i} className="flex items-start space-x-2 mb-2">
+              <span className="font-semibold text-blue-600 min-w-[24px]">{part}</span>
+              <span>{nextPart}</span>
+            </div>
+          );
+          i++; // Skip the next part as we've already processed it
+        }
+      } else if (!/^\d+\)/.test(parts[i - 1] || '')) {
+        // This is regular text (not following a number)
+        formatted.push(
+          <div key={i} className="mb-2">
+            {part}
+          </div>
+        );
+      }
+    }
+    
+    return formatted.length > 0 ? formatted : [<div key="default">{answer}</div>];
   };
 
   /**
@@ -426,11 +462,11 @@ const FAQPage: React.FC<FAQPageProps> = ({ onBack }) => {
         </div>
 
         {/* FAQ Items */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="space-y-4">
           {filteredFAQs.map((faq) => (
             <div
               key={faq.id}
-              className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl"
+              className="bg-white/80 backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg transition-all duration-300 hover:shadow-xl"
             >
               <button
                 onClick={() => toggleExpanded(faq.id)}
@@ -440,7 +476,7 @@ const FAQPage: React.FC<FAQPageProps> = ({ onBack }) => {
                   <h3 className="text-lg font-semibold text-slate-800 leading-tight">{faq.question}</h3>
                 </div>
                 <div className="flex-shrink-0 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                  {expandedItems.includes(faq.id) ? (
+                  {expandedItem === faq.id ? (
                     <ChevronUp className="w-5 h-5 text-white" />
                   ) : (
                     <ChevronDown className="w-5 h-5 text-white" />
@@ -449,11 +485,11 @@ const FAQPage: React.FC<FAQPageProps> = ({ onBack }) => {
               </button>
 
               {/* Expandable Answer */}
-              {expandedItems.includes(faq.id) && (
+              {expandedItem === faq.id && (
                 <div className="px-6 pb-6 border-t border-slate-200/50 bg-gradient-to-r from-blue-50/50 to-purple-50/50 animate-in slide-in-from-top-2">
                   <div className="pt-4">
-                    <p className="text-slate-700 leading-relaxed text-base mb-4">{faq.answer}</p>
-                    <div className="flex items-center justify-between">
+                    <div className="text-slate-700 leading-relaxed text-base mb-4">{formatAnswer(faq.answer)}</div>
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-200/30">
                       <span className="inline-block px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full text-xs font-medium">
                         {categories.find(cat => cat.id === faq.category)?.label || 'General'}
                       </span>

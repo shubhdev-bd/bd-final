@@ -1,45 +1,20 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Phone, Mail, MessageCircle, Clock, MapPin, Send, Star } from 'lucide-react';
+import { ArrowLeft, Phone, Mail, Clock, MessageCircle } from 'lucide-react';
 
 interface SupportPageProps {
   onBack: () => void;
 }
 
 const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
-  const [selectedCategory, setSelectedCategory] = useState('general');
-  const [message, setMessage] = useState('');
-
-  const supportCategories = [
-    { id: 'general', label: 'General Inquiry', icon: '❓' },
-    { id: 'technical', label: 'Technical Support', icon: '🔧' },
-    { id: 'counselling', label: 'Counseling Help', icon: '🎓' },
-    { id: 'billing', label: 'Billing & Payments', icon: '💳' },
-  ];
-
-  const faqItems = [
-    {
-      question: 'How do I check my NEET result?',
-      answer: 'Visit the official NEET website and enter your application number and password to download your scorecard.'
-    },
-    {
-      question: 'What is the counseling process?',
-      answer: 'The counseling process involves registration, choice filling, seat allotment, and document verification.'
-    },
-    {
-      question: 'How can I predict my college admission chances?',
-      answer: 'Use our College Predictor tool by entering your NEET rank and preferred states to get accurate predictions.'
-    },
-    {
-      question: 'What documents are required for counseling?',
-      answer: 'You need NEET scorecard, class 12 marksheet, category certificate (if applicable), and identity proof.'
-    }
-  ];
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    alert('Your message has been sent! We will get back to you soon.');
-    setMessage('');
+  /**
+   * Handle WhatsApp button click
+   * Opens WhatsApp with pre-filled message
+   */
+  const handleWhatsAppClick = () => {
+    const phoneNumber = '919876543210'; // Replace with actual WhatsApp number
+    const message = encodeURIComponent('Hi! I need help with medical counselling guidance.');
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -66,10 +41,11 @@ const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Contact Methods */}
-          <div className="lg:col-span-1">
-            <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-lg mb-6">
+        <div className="max-w-4xl mx-auto">
+          {/* Contact Methods - Centered */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            {/* Contact Us */}
+            <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 border border-white/20 shadow-lg">
               <h3 className="text-xl font-bold text-slate-800 mb-6">Contact Us</h3>
               
               <div className="space-y-4">
@@ -95,27 +71,92 @@ const SupportPage: React.FC<SupportPageProps> = ({ onBack }) => {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-4 p-4 bg-purple-50 rounded-xl border border-purple-200">
+                <div className="flex items-center space-x-4 p-4 bg-green-50 rounded-xl border border-green-200">
                   <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
-                    <MessageCircle className="w-6 h-6 text-white" />
+                    <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                      <MessageCircle className="w-6 h-6 text-white" />
+                    </div>
                   </div>
                   <div>
-                    <p className="font-medium text-slate-800">Live Chat</p>
+                    <p className="font-medium text-slate-800">WhatsApp Support</p>
                     <p className="text-sm text-slate-600">Instant messaging</p>
-                    <p className="text-xs text-purple-600">Available now</p>
+                    <p className="text-xs text-green-600">Available 24/7</p>
                   </div>
                 </div>
+                
+                {/* WhatsApp Button */}
+                <button
+                  onClick={handleWhatsAppClick}
+                  className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2 mt-4"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  <span>Start WhatsApp Chat</span>
+                </button>
               </div>
             </div>
 
             {/* Office Hours */}
-            <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-6 border border-white/20 shadow-lg">
-              <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center">
+            <div className="bg-white/80 backdrop-blur-xl rounded-2xl p-8 border border-white/20 shadow-lg">
+              <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center justify-center">
                 <Clock className="w-5 h-5 mr-2" />
                 Office Hours
               </h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
+              
+              <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200/50">
+                <div className="space-y-3 text-base">
+                  <div className="flex justify-between items-center p-3 bg-white/50 rounded-lg">
+                    <span className="text-slate-700 font-medium">Monday - Friday</span>
+                    <span className="font-bold text-blue-600">9:00 AM - 8:00 PM</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-white/50 rounded-lg">
+                    <span className="text-slate-700 font-medium">Saturday</span>
+                    <span className="font-bold text-blue-600">10:00 AM - 6:00 PM</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-white/50 rounded-lg">
+                    <span className="text-slate-700 font-medium">Sunday</span>
+                    <span className="font-bold text-blue-600">10:00 AM - 4:00 PM</span>
+                  </div>
+                </div>
+                
+                <div className="mt-4 p-3 bg-green-100 rounded-lg border border-green-200">
+                  <p className="text-sm text-green-800 text-center font-medium">
+                    🟢 We're currently online and ready to help!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Emergency Contact */}
+          <div className="bg-gradient-to-r from-red-500 to-pink-600 rounded-2xl p-8 text-white text-center shadow-xl">
+            <h3 className="text-2xl font-bold mb-4">Need Urgent Help?</h3>
+            <p className="text-red-100 mb-6 text-lg">
+              For urgent queries related to counseling deadlines or admission processes
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a
+                href="tel:+919876543210"
+                className="bg-white/20 backdrop-blur-sm px-8 py-3 rounded-xl hover:bg-white/30 transition-all duration-200 font-medium transform hover:scale-105 shadow-lg flex items-center space-x-2"
+              >
+                <Phone className="w-5 h-5" />
+                <span>Call Now: +91 9876543210</span>
+              </a>
+              <button
+                onClick={handleWhatsAppClick}
+                className="bg-green-500 hover:bg-green-600 px-8 py-3 rounded-xl transition-all duration-200 font-medium transform hover:scale-105 shadow-lg flex items-center space-x-2"
+              >
+                <MessageCircle className="w-5 h-5" />
+                <span>WhatsApp Now</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SupportPage;
                   <span className="text-slate-600">Monday - Friday</span>
                   <span className="font-medium">9:00 AM - 8:00 PM</span>
                 </div>
